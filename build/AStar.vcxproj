@@ -314,6 +314,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\Users\Mathias\OneDrive - Aalborg Universitet\A-star\main.c" />
+    <ClInclude Include="C:\Users\Mathias\OneDrive - Aalborg Universitet\A-star\stack.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:\Users\Mathias\OneDrive - Aalborg Universitet\A-star\build\ZERO_CHECK.vcxproj">

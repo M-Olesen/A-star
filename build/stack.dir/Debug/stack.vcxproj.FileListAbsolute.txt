@@ -1,0 +1,2 @@
+C:\Users\Mathias\OneDrive - Aalborg Universitet\A-star\build\Debug\stack.pdb
+C:\Users\Mathias\OneDrive - Aalborg Universitet\A-star\build\stack.dir\Debug\stack.pdb

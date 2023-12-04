@@ -9,7 +9,7 @@ int foundDest = 0;
 Set openList;
 int closedList[ROW][COL];
 
-void process_successor(int i, int j, Pair dest, int grid[][COL], int diagonel){
+void process_successor(int i, int j, Pair dest, Pair src, int grid[][COL], int diagonel){
 if (foundDest== 0){
 
 
@@ -22,7 +22,7 @@ if (foundDest== 0){
             cellDetails[i][j].parent_i = i;
             cellDetails[i][j].parent_j = j;
             printf("The destination cell is found\n");
-            tracePath(dest, grid);
+            tracePath(dest, src, grid);
             foundDest = 1;
             return;
         }
@@ -99,7 +99,7 @@ double calculateHValue(int row, int col, Pair dest)
 }
 
 
-void tracePath(Pair dest, int grid[][COL])
+void tracePath(Pair dest, Pair src, int grid[][COL])
 {
     printf("\nThe Path is: ");
     int row = dest.first;
@@ -107,8 +107,8 @@ void tracePath(Pair dest, int grid[][COL])
 
     struct Stack* Path = createStack(100);
 
-    while (!(cellDetails[row][col].parent_i == row
-             && cellDetails[row][col].parent_j == col)) {
+    while (!(cellDetails[row][col].parent_i == src.first
+             && cellDetails[row][col].parent_j == src.second)) {
         Pair item = {row, col};
         push(Path, item);
         int temp_row = cellDetails[row][col].parent_i;
@@ -250,14 +250,14 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest) {
         // To store the 'g', 'h' and 'f' of the 8 successors
 
         //----------- 1st Successor (North) ------------
-        process_successor(i - 1, j, dest, grid, 0);
-        process_successor(i + 1, j, dest, grid, 0);
-        process_successor(i, j + 1, dest, grid, 0);
-        process_successor(i, j - 1, dest, grid, 0);
-        process_successor(i - 1, j + 1, dest, grid, 1);
-        process_successor(i - 1, j - 1, dest, grid, 1);
-        process_successor(i + 1, j + 1, dest, grid, 1);
-        process_successor(i + 1, j - 1, dest, grid, 1);
+        process_successor(i - 1, j, dest, src, grid, 0);
+        process_successor(i + 1, j, dest, src, grid, 0);
+        process_successor(i, j + 1, dest, src, grid, 0);
+        process_successor(i, j - 1, dest, src, grid, 0);
+        process_successor(i - 1, j + 1, dest, src, grid, 1);
+        process_successor(i - 1, j - 1, dest, src, grid, 1);
+        process_successor(i + 1, j + 1, dest, src, grid, 1);
+        process_successor(i + 1, j - 1, dest, src, grid, 1);
         // Only process this cell if this is a valid one
 
         // When the destination cell is not found and the open

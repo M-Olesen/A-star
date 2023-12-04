@@ -6,9 +6,17 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="C:\Users\Mathias\OneDrive - Aalborg Universitet\A-star\stack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
     <CustomBuild Include="C:\Users\Mathias\OneDrive - Aalborg Universitet\A-star\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{FA89E302-A60A-3C2F-B904-38AC31F6D693}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{15ABFE6A-B900-37E0-BDAC-1F8D176E7D8A}</UniqueIdentifier>
     </Filter>
