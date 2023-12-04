@@ -4,7 +4,8 @@ project(AStar VERSION 0.1.0 LANGUAGES C)
 include(CTest)
 enable_testing()
 
-add_executable(AStar main.c)
+add_executable(AStar main.c
+        stack.h)
 
 add_library(search search.c)
 target_include_directories(search PUBLIC .)
