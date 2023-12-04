@@ -9,16 +9,18 @@ int foundDest = 0;
 Set openList;
 int closedList[ROW][COL];
 
-void process_successor(int i, int j, Pair dest, int grid[][COL]){
+void process_successor(int i, int j, Pair dest, int grid[][COL], int diagonel){
+if (foundDest== 0){
+
 
     // Only process this cell if this is a valid one
-    if (isValid(i - 1, j) == 1) {
+    if (isValid(i, j) == 1) {
         // If the destination cell is the same as the
         // current successor
-        if (isDestination(i - 1, j, dest) == 1) {
+        if (isDestination(i, j, dest) == 1) {
             // Set the Parent of the destination cell
-            cellDetails[i - 1][j].parent_i = i;
-            cellDetails[i - 1][j].parent_j = j;
+            cellDetails[i][j].parent_i = i;
+            cellDetails[i][j].parent_j = j;
             printf("The destination cell is found\n");
             tracePath(dest, grid);
             foundDest = 1;
@@ -27,11 +29,17 @@ void process_successor(int i, int j, Pair dest, int grid[][COL]){
             // If the successor is already on the closed
             // list or if it is blocked, then ignore it.
             // Else do the following
-        else if (closedList[i - 1][j] == 0
-                 && isUnBlocked(grid, i - 1, j)
+        else if (closedList[i][j] == 0
+                 && isUnBlocked(grid, i, j)
                     == 1) {
-            double gNew = cellDetails[i][j].g + 1.0;
-            double hNew = calculateHValue(i - 1, j, dest);
+            double gNew;
+            if (diagonel == 0){
+                gNew = cellDetails[i][j].g + 1.0;
+            } else {
+                gNew = cellDetails[i][j].g + 1.414;
+            }
+
+            double hNew = calculateHValue(i, j, dest);
             double fNew = gNew + hNew;
 
             // If it isn’t on the open list, add it to
@@ -42,21 +50,22 @@ void process_successor(int i, int j, Pair dest, int grid[][COL]){
             // If it is on the open list already, check
             // to see if this path to that square is
             // better, using 'f' cost as the measure.
-            if (cellDetails[i - 1][j].f == 2147483647
-                || cellDetails[i - 1][j].f > fNew) {
-                Pair pair1 = {i-1, j};
+            if (cellDetails[i][j].f == 2147483647
+                || cellDetails[i][j].f > fNew) {
+                Pair pair1 = {i, j};
                 pPair pPair1 = {fNew, pair1};
                 addToSet(&openList, pPair1);
 
                 // Update the details of this cell
-                cellDetails[i - 1][j].f = fNew;
-                cellDetails[i - 1][j].g = gNew;
-                cellDetails[i - 1][j].h = hNew;
-                cellDetails[i - 1][j].parent_i = i;
-                cellDetails[i - 1][j].parent_j = j;
+                cellDetails[i][j].f = fNew;
+                cellDetails[i][j].g = gNew;
+                cellDetails[i][j].h = hNew;
+                cellDetails[i][j].parent_i = i;
+                cellDetails[i][j].parent_j = j;
             }
         }
     }
+}
 }
 
 int isValid(int row, int col) {
@@ -241,14 +250,14 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest) {
         // To store the 'g', 'h' and 'f' of the 8 successors
 
         //----------- 1st Successor (North) ------------
-        process_successor(i - 1, j, dest, grid);
-        process_successor(i + 1, j, dest, grid);
-        process_successor(i, j + 1, dest, grid);
-        process_successor(i, j - 1, dest, grid);
-        process_successor(i - 1, j + 1, dest, grid);
-        process_successor(i - 1, j - 1, dest, grid);
-        process_successor(i + 1, j + 1, dest, grid);
-        process_successor(i + 1, j - 1, dest, grid);
+        process_successor(i - 1, j, dest, grid, 0);
+        process_successor(i + 1, j, dest, grid, 0);
+        process_successor(i, j + 1, dest, grid, 0);
+        process_successor(i, j - 1, dest, grid, 0);
+        process_successor(i - 1, j + 1, dest, grid, 1);
+        process_successor(i - 1, j - 1, dest, grid, 1);
+        process_successor(i + 1, j + 1, dest, grid, 1);
+        process_successor(i + 1, j - 1, dest, grid, 1);
         // Only process this cell if this is a valid one
 
         // When the destination cell is not found and the open
