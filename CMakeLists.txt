@@ -5,7 +5,9 @@ include(CTest)
 enable_testing()
 
 add_executable(AStar main.c
-        stack.h)
+        stack.h
+        InputOutput.c
+        InputOutput.h)
 
 add_library(search search.c)
 target_include_directories(search PUBLIC .)

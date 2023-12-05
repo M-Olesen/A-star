@@ -2,6 +2,7 @@
 #include "Search.h"
 #include <math.h>
 #include <string.h>
+#include "InputOutput.h"
 
 #define ROW 9
 #define COL 10
@@ -11,8 +12,7 @@
 /* Description of the Grid-
      1--> The cell is not blocked
      0--> The cell is blocked    */
-    int grid[ROW][COL]
-        = { { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
+    /*int grid[ROW][COL] = { { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
             { 1, 1, 1, 0, 1, 1, 1, 0, 1, 1 },
             { 1, 1, 1, 0, 1, 1, 0, 1, 0, 1 },
             { 0, 0, 1, 0, 1, 0, 0, 0, 0, 1 },
@@ -21,6 +21,7 @@
             { 1, 0, 0, 0, 0, 1, 0, 0, 0, 1 },
             { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
             { 1, 1, 1, 0, 0, 0, 1, 0, 0, 1 } };
+            */
 
 
 
@@ -28,7 +29,9 @@
 
 int main()
 {
-    
+    int grid[ROW][COL];
+
+    input(grid);
  
     // Source is the left-most bottom-most corner
     Pair src = {8, 0};
