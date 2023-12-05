@@ -10,59 +10,63 @@ int foundDest = 0;
 Set openList;
 int closedList[ROW][COL];
 
-void updateParrentCell(int dir, int i, int j) {
+// Function to set the current cells parrent based on a direction
+void updateParrentCell(int dir, int i, int j)
+{
     if (dir == 1)
-                {
-                    cellDetails[i][j].parent_i = i + 1;
-                    cellDetails[i][j].parent_j = j;
-                }
-                else if (dir == 2)
-                {
-                    cellDetails[i][j].parent_i = i - 1;
-                    cellDetails[i][j].parent_j = j;
-                }
-                else if (dir == 3)
-                {
-                    cellDetails[i][j].parent_i = i;
-                    cellDetails[i][j].parent_j = j - 1;
-                }
-                else if (dir == 4)
-                {
-                    cellDetails[i][j].parent_i = i;
-                    cellDetails[i][j].parent_j = j + 1;
-                }
-                else if (dir == 5)
-                {
-                    cellDetails[i][j].parent_i = i + 1;
-                    cellDetails[i][j].parent_j = j - 1;
-                }
-                else if (dir == 6)
-                {
-                    cellDetails[i][j].parent_i = i + 1;
-                    cellDetails[i][j].parent_j = j + 1;
-                }
-                else if (dir == 7)
-                {
-                    cellDetails[i][j].parent_i = i - 1;
-                    cellDetails[i][j].parent_j = j - 1;
-                }
-                else
-                {
-                    cellDetails[i][j].parent_i = i - 1;
-                    cellDetails[i][j].parent_j = j + 1;
-                }
+    {
+        cellDetails[i][j].parent_i = i + 1;
+        cellDetails[i][j].parent_j = j;
+    }
+    else if (dir == 2)
+    {
+        cellDetails[i][j].parent_i = i - 1;
+        cellDetails[i][j].parent_j = j;
+    }
+    else if (dir == 3)
+    {
+        cellDetails[i][j].parent_i = i;
+        cellDetails[i][j].parent_j = j - 1;
+    }
+    else if (dir == 4)
+    {
+        cellDetails[i][j].parent_i = i;
+        cellDetails[i][j].parent_j = j + 1;
+    }
+    else if (dir == 5)
+    {
+        cellDetails[i][j].parent_i = i + 1;
+        cellDetails[i][j].parent_j = j - 1;
+    }
+    else if (dir == 6)
+    {
+        cellDetails[i][j].parent_i = i + 1;
+        cellDetails[i][j].parent_j = j + 1;
+    }
+    else if (dir == 7)
+    {
+        cellDetails[i][j].parent_i = i - 1;
+        cellDetails[i][j].parent_j = j - 1;
+    }
+    else
+    {
+        cellDetails[i][j].parent_i = i - 1;
+        cellDetails[i][j].parent_j = j + 1;
+    }
 }
 
+// Funtion to process a move in a direction
 void process_successor(int i, int j, Pair dest, Pair src, int grid[][COL], int diagonel, int direction)
-{
+{   
+    // Only run this function if the destination is NOT found
     if (foundDest == 0)
     {
 
         // Only process this cell if this is a valid one
         if (isValid(i, j) == 1)
-        {   
-            //set the parrent of the cell depending if it is diagonal or not
-            
+        {
+            // set the parrent of the cell depending if it is diagonal or not
+
             // If the destination cell is the same as the
             // current successor
             if (isDestination(i, j, dest) == 1)
@@ -113,14 +117,14 @@ void process_successor(int i, int j, Pair dest, Pair src, int grid[][COL], int d
         }
     }
 }
-
+// Check if the cell is valid
 int isValid(int row, int col)
 {
     // Returns 1 if row number and column number
     // is in range
     return (row >= 0) && (row < ROW) && (col >= 0) && (col < COL);
 }
-
+// Check if the cell is unblocked
 int isUnBlocked(int grid[][COL], int row, int col)
 {
     // Returns 1 if the cell is not blocked else 0
@@ -129,7 +133,7 @@ int isUnBlocked(int grid[][COL], int row, int col)
     else
         return (0);
 }
-
+// Check if the cell is the destination
 int isDestination(int row, int col, Pair dest)
 {
     if (row == dest.first && col == dest.second)
@@ -137,7 +141,7 @@ int isDestination(int row, int col, Pair dest)
     else
         return (0);
 }
-
+// Calculates the H value
 double calculateHValue(int row, int col, Pair dest)
 {
     // Return using the distance formula
@@ -145,35 +149,42 @@ double calculateHValue(int row, int col, Pair dest)
         (row - dest.first) * (row - dest.first) + (col - dest.second) * (col - dest.second)));
 }
 
+// Function to trace the path from destination to source in a grid and output the path
 void tracePath(Pair dest, Pair src, int grid[][COL])
 {
-
+    // Extract the destination row and column
     int row = dest.first;
     int col = dest.second;
 
+    // Create a stack to store the path
     struct Stack *Path = createStack(100);
 
+    // Trace the path from destination to source until reaching the source
     while (!(cellDetails[row][col].parent_i == src.first && cellDetails[row][col].parent_j == src.second))
     {
+        // Create a Pair with the current row and column and push it onto the stack
         Pair item = {row, col};
         push(Path, item);
+
+        // Update the row and column to the parent coordinates
         int temp_row = cellDetails[row][col].parent_i;
         int temp_col = cellDetails[row][col].parent_j;
         row = temp_row;
         col = temp_col;
     }
 
+    // Push the coordinates to the cell before the source onto the stack
     Pair item = {row, col};
     push(Path, item);
+
+    // Push the source coordinates onto the stack 
     Pair item2 = {src.first, src.second};
     push(Path, item2);
 
-    printf("\n");
-
+    // Output the path and update the grid with the path information
     output(grid, *Path);
-
 }
-
+// The main funtion in the program, runs an Astar search on a grid given a source and a destination
 void aStarSearch(int grid[][COL], Pair src, Pair dest)
 {
     // If the source is out of range
@@ -287,8 +298,6 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
          S.E--> South-East  (i+1, j+1)
          S.W--> South-West  (i+1, j-1)*/
 
-        // To store the 'g', 'h' and 'f' of the 8 successors
-
         //----------- 1st Successor (North) ------------
         process_successor(i - 1, j, dest, src, grid, 0, 1);
         process_successor(i + 1, j, dest, src, grid, 0, 2);
@@ -298,7 +307,6 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
         process_successor(i - 1, j - 1, dest, src, grid, 1, 6);
         process_successor(i + 1, j + 1, dest, src, grid, 1, 7);
         process_successor(i + 1, j - 1, dest, src, grid, 1, 8);
-        // Only process this cell if this is a valid one
 
         // When the destination cell is not found and the open
         // list is empty, then we conclude that we failed to
