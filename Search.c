@@ -1,6 +1,8 @@
 #include <math.h>
 #include <string.h>
 #include "search.h"
+#include "InputOutput.h"
+
 #define ROW 9
 #define COL 10
 cell cellDetails[ROW][COL];
@@ -145,7 +147,7 @@ double calculateHValue(int row, int col, Pair dest)
 
 void tracePath(Pair dest, Pair src, int grid[][COL])
 {
-    printf("\nThe Path is: ");
+
     int row = dest.first;
     int col = dest.second;
 
@@ -166,24 +168,10 @@ void tracePath(Pair dest, Pair src, int grid[][COL])
     Pair item2 = {src.first, src.second};
     push(Path, item2);
 
-    printf("%d", isEmpty(Path));
-    while (isEmpty(Path) != 1)
-    {
-        Pair p = peek(Path);
-        pop(Path);
-        grid[p.first][p.second] += 1;
-        printf("-> (%d,%d) ", p.first, p.second);
-    }
     printf("\n");
 
-    for (int i = 0; i < ROW; i++)
-    {
-        for (int l = 0; l < COL; l++)
-        {
-            printf("%d ", grid[i][l]);
-        }
-        printf("\n");
-    }
+    output(grid, *Path);
+
 }
 
 void aStarSearch(int grid[][COL], Pair src, Pair dest)

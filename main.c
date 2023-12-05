@@ -29,6 +29,8 @@
 
 int main()
 {
+    clear_output_file();
+
     int grid[ROW][COL];
 
     input(grid);
