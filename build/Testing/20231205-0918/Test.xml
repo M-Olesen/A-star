@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Site BuildName="Win32-MSBuild"
-	BuildStamp="20231204-0827-Experimental"
+	BuildStamp="20231205-0918-Experimental"
 	Name="DESKTOP-BEB1HM7"
 	Generator="ctest-3.28.0-rc1"
 	CompilerName=""
@@ -24,11 +24,11 @@
 	ProcessorClockFrequency="2304"
 	>
 	<Testing>
-		<StartDateTime>Dec 04 13:11 Rom, normaltid</StartDateTime>
-		<StartTestTime>1701691895</StartTestTime>
+		<StartDateTime>Dec 05 10:34 Rom, normaltid</StartDateTime>
+		<StartTestTime>1701768870</StartTestTime>
 		<TestList/>
-		<EndDateTime>Dec 04 13:11 Rom, normaltid</EndDateTime>
-		<EndTestTime>1701691895</EndTestTime>
+		<EndDateTime>Dec 05 10:34 Rom, normaltid</EndDateTime>
+		<EndTestTime>1701768870</EndTestTime>
 		<ElapsedMinutes>0</ElapsedMinutes>
 	</Testing>
 </Site>

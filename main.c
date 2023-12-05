@@ -3,12 +3,10 @@
 #include <math.h>
 #include <string.h>
 
-
-// C program for array implementation of stack
-
-#define MAX_SIZE 100
 #define ROW 9
 #define COL 10
+// C program for array implementation of stack
+
 
 /* Description of the Grid-
      1--> The cell is not blocked
