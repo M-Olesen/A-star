@@ -7,7 +7,10 @@ enable_testing()
 add_executable(AStar main.c
         stack.h
         InputOutput.c
-        InputOutput.h)
+        InputOutput.h
+        TSP.c
+        TSP.h
+)
 
 add_library(search search.c)
 target_include_directories(search PUBLIC .)
