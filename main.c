@@ -6,8 +6,6 @@
 
 #define ROW 9
 #define COL 10
-// C program for array implementation of stack
-
 
 /* Description of the Grid-
      1--> The cell is not blocked
@@ -22,10 +20,6 @@
             { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
             { 1, 1, 1, 0, 0, 0, 1, 0, 0, 1 } };
             */
-
-
-
-
 
 int main()
 {
