@@ -8,8 +8,6 @@ add_executable(AStar main.c
         stack.h
         InputOutput.c
         InputOutput.h
-        TSP.c
-        TSP.h
 )
 
 add_library(search search.c)

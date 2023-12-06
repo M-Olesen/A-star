@@ -18,17 +18,17 @@
 	ProcessorCacheSize="-1"
 	NumberOfLogicalCPU="4"
 	NumberOfPhysicalCPU="4"
-	TotalVirtualMemory="12058"
+	TotalVirtualMemory="13099"
 	TotalPhysicalMemory="8090"
 	LogicalProcessorsPerPhysical="1"
 	ProcessorClockFrequency="2304"
 	>
 	<Testing>
-		<StartDateTime>Dec 06 09:34 Rom, normaltid</StartDateTime>
-		<StartTestTime>1701851689</StartTestTime>
+		<StartDateTime>Dec 06 13:50 Rom, normaltid</StartDateTime>
+		<StartTestTime>1701867052</StartTestTime>
 		<TestList/>
-		<EndDateTime>Dec 06 09:34 Rom, normaltid</EndDateTime>
-		<EndTestTime>1701851689</EndTestTime>
+		<EndDateTime>Dec 06 13:50 Rom, normaltid</EndDateTime>
+		<EndTestTime>1701867052</EndTestTime>
 		<ElapsedMinutes>0</ElapsedMinutes>
 	</Testing>
 </Site>

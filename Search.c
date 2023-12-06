@@ -11,17 +11,14 @@
 #define COL 10
 #define MAX_CITIES 90
 
-// Define the structure for a city
-typedef struct {
-    double x, y;
-} Mine;
+// Define the structure for a mine
 cell cellDetails[ROW][COL];
 int foundDest = 0;
 Set openList;
 int closedList[ROW][COL];
 
-Mine cities[MAX_CITIES];
-int numCities;
+Pair mines[MAX_CITIES];
+int numMines;
 int bestPath[MAX_CITIES];
 double bestCost = INT_MAX;
 
@@ -333,75 +330,117 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
         printf("Failed to find the Destination Cell\n");
 }
 
-double calculateDistance(Mine city1, Mine city2) {
-    return sqrt(pow(city1.x - city2.x, 2) + pow(city1.y - city2.y, 2));
-}
 
-// Function to check if a city is already in the path
-int isVisited(int* path, int city, int n) {
+// Function to check if a mine is already in the path
+int isVisited(int* path, int mine, int n) {
     for (int i = 0; i < n; i++) {
-        if (path[i] == city) {
-            return 1; // City is already visited
+        if (path[i] == mine) {
+            return 1; // mine is already visited
         }
     }
-    return 0; // City is not visited
+    return 0; // mine is not visited
+}
+
+// Function to calculate the Euclidean distance between two points
+double calculateDistance(pPair point1, pPair point2) {
+    return sqrt(pow(point1.second.first - point2.second.first, 2) + pow(point1.second.second - point2.second.second, 2));
+}
+
+// Function to find the next city to visit in the TSP
+int findNextCity(Set* remainingCities, pPair currentCity) {
+    double minDistance = 1.7976931348623157E+308;
+    int nextCityIndex = -1;
+
+    for (int i = 0; i < remainingCities->size; ++i) {
+        double distance = calculateDistance(currentCity, remainingCities->elements[i]);
+        if (distance < minDistance) {
+            minDistance = distance;
+            nextCityIndex = i;
+        }
+    }
+
+    return nextCityIndex;
 }
 
 // Function to solve the TSP using recursive backtracking
-void solveTSP(int* path, int level, double currentCost) {
-    if (level == numCities) {
-        // Completed a full tour, check if it's the best so far
-        currentCost += calculateDistance(cities[path[level - 1]], cities[path[0]]); // Return to the starting city
-        if (currentCost < bestCost) {
-            bestCost = currentCost;
-            memcpy(bestPath, path, sizeof(int) * numCities);
-        }
-    } else {
-        // Try visiting each unvisited city
-        for (int i = 0; i < numCities; i++) {
-            if (!isVisited(path, i, level)) {
-                path[level] = i;
-                double newCost = currentCost + (level == 0 ? 0 : calculateDistance(cities[path[level - 1]], cities[i]));
-                solveTSP(path, level + 1, newCost);
-            }
-        }
+// Implementation of solveTSP function
+void solveTSP(Set* cities) {
+    if (cities->size <= 1) {
+        printf("Not enough cities to solve TSP.\n");
+        return;
     }
+
+    Set remainingCities;
+    initializeSet(&remainingCities);
+    for (int i = 1; i < cities->size; ++i) {
+        addToSet(&remainingCities, cities->elements[i]);
+    }
+
+    struct Stack* stack = createStack(MAX_SIZE);
+    push(stack, cities->elements[0].second);
+
+    double totalDistance = 0;
+
+    while (!isSetEmpty(&remainingCities)) {
+        pPair currentCity = {0.0, peek(stack)};
+        int nextCityIndex = findNextCity(&remainingCities, currentCity);
+
+        if (nextCityIndex == -1) {
+            // No more cities to visit, go back to the starting city
+            totalDistance += calculateDistance(currentCity, cities->elements[0]);
+            cities->elements[0].first = calculateDistance(currentCity, cities->elements[0]);
+            break;
+        }
+
+        pPair nextCity = remainingCities.elements[nextCityIndex];
+        totalDistance += calculateDistance(currentCity, nextCity);
+            currentCity.first = calculateDistance(currentCity, nextCity);
+        
+        push(stack, nextCity.second);
+        removeFromSet(&remainingCities, nextCity);
+    }
+
+    printf("Total distance of TSP tour: %.2f\n", totalDistance);
 }
+
 
 // Modify your aStarSearch function to solve the TSP using A*
 void tspAStar(int grid[][COL], Pair src) {
     // Assuming that cities[] array is populated with the coordinates of cities
-
+    Set path;
+    initializeSet(&path);
     // Set the number of cities
-    int numMines = 0;
+    numMines = 0;
     for (int i = 0; i < ROW; i++)
     {
         for (int j = 0; j < COL; j++)
         {
             if(grid[i][j] == 0)
             {
+                Pair p = {i, j};
+                mines[numMines] = p;
+                pPair pp = {0.0, p};
+                addToSet(&path, pp);
                 numMines++;
             }
         }
     }
+    printf("%d", numMines);
     
      // Adjust this based on the actual number of cities
 
     // Initialize the path array
-    int path[MAX_CITIES];
-    memset(path, -1, sizeof(int) * MAX_CITIES);
 
-    // Start the TSP from the source city
-    path[0] = src.first;
+    // Start the TSP from the source mine
+    
 
     // Solve the TSP using recursive backtracking
-    solveTSP(path, 1, 0.0);
+    solveTSP(&path);
 
     // Output the best path and cost
     printf("Best TSP Path: ");
     for (int i = 0; i < numMines; i++) {
-        printf("%d ", bestPath[i]);
+        printf("%lf : %d,%d\n", path.elements[i].first, path.elements[i].second.first, path.elements[i].second.second);
     }
-    printf("\nBest TSP Cost: %f\n", bestCost);
 }
 

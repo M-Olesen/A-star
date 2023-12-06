@@ -28,11 +28,11 @@ Pair pop(struct Stack* stack);
 Pair peek(struct Stack* stack);
 
 // A structure to represent a stack
-struct Stack {
+typedef struct Stack {
     int top;
     unsigned capacity;
     Pair* array;
-};
+} Stack;
 
 void initializeSet(Set* set);
 bool isInSet(Set* set, pPair element);

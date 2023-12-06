@@ -7,18 +7,12 @@
     <ClCompile Include="C:\Users\Mathias\OneDrive - Aalborg Universitet\A-star\InputOutput.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Mathias\OneDrive - Aalborg Universitet\A-star\TSP.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\Users\Mathias\OneDrive - Aalborg Universitet\A-star\stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Mathias\OneDrive - Aalborg Universitet\A-star\InputOutput.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Users\Mathias\OneDrive - Aalborg Universitet\A-star\TSP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
