@@ -14,3 +14,4 @@ int isDestination(int row, int col, Pair dest);
 double calculateHValue(int row, int col, Pair dest);
 void tracePath(Pair dest, Pair src, int grid[][COL]);
 void aStarSearch(int grid[][COL], Pair src, Pair dest);
+void tspAStar(int grid[][COL], Pair src);

@@ -4,6 +4,7 @@
 #include <string.h>
 #include "InputOutput.h"
 
+
 #define ROW 9
 #define COL 10
 
@@ -36,6 +37,8 @@ int main()
     Pair dest = {0, 9};
  
     aStarSearch(grid, src, dest);
+
+    tspAStar(grid, src);
  
     return (0);
 }
