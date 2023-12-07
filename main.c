@@ -35,11 +35,13 @@ int main()
  
     // Destination is the left-most top-most corner
     Pair dest = {0, 9};
-    tspAStar(grid, src);
+    
 
     aStarSearch(grid, src, dest);
 
 
- 
+    input(grid);
+
+    tspAStar(grid, src);
     return (0);
 }

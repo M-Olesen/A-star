@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "RelWithDebInfo/AStar.exe"
+			"path" : "MinSizeRel/AStar.exe"
 		},
 		{
-			"path" : "RelWithDebInfo/AStar.pdb"
+			"path" : "MinSizeRel/AStar.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -51,7 +51,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /W3 /MD /Zi /O2 /Ob1 /DNDEBUG"
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /MD /O1 /Ob1 /DNDEBUG"
 				}
 			],
 			"includes" : 
@@ -72,15 +72,15 @@
 	"dependencies" : 
 	[
 		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		},
+		{
 			"backtrace" : 2,
 			"id" : "search::@6890427a1f51a3e7e1df"
 		},
 		{
 			"backtrace" : 3,
 			"id" : "stack::@6890427a1f51a3e7e1df"
-		},
-		{
-			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
 		}
 	],
 	"id" : "AStar::@6890427a1f51a3e7e1df",
@@ -89,21 +89,21 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "/DWIN32 /D_WINDOWS /W3 /MD /Zi /O2 /Ob1 /DNDEBUG",
+				"fragment" : "/DWIN32 /D_WINDOWS /W3 /MD /O1 /Ob1 /DNDEBUG",
 				"role" : "flags"
 			},
 			{
-				"fragment" : "/machine:X86 /debug /INCREMENTAL /subsystem:console",
+				"fragment" : "/machine:X86 /INCREMENTAL:NO /subsystem:console",
 				"role" : "flags"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "RelWithDebInfo\\search.lib",
+				"fragment" : "MinSizeRel\\search.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "RelWithDebInfo\\stack.lib",
+				"fragment" : "MinSizeRel\\stack.lib",
 				"role" : "libraries"
 			},
 			{

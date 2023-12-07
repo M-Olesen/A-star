@@ -6,9 +6,10 @@
 #include <stdlib.h>
 #include <limits.h>
 
+
 #define ROW 9
 #define COL 10
-#define MAX ROW *COL
+#define MAX_CITIES 90
 
 // Define the structure for a mine
 cell cellDetails[ROW][COL];
@@ -16,25 +17,10 @@ int foundDest = 0;
 Set openList;
 int closedList[ROW][COL];
 
+Pair mines[MAX_CITIES];
 int numMines;
+int bestPath[MAX_CITIES];
 double bestCost = INT_MAX;
-
-typedef struct
-{
-    int x, y;
-} Mine;
-
-typedef struct
-{
-    int x, y;
-} Point;
-
-int n; // Number of mines
-
-Point startingPoint; // Starting point on the grid
-Mine mines[MAX];     // Array to store the coordinates of mines
-int visited[MAX];    // Array to keep track of visited mines
-int path[MAX];       // Array to store the TSP tour
 
 // Function to set the current cells parrent based on a direction
 void updateParrentCell(int dir, int i, int j)
@@ -83,7 +69,7 @@ void updateParrentCell(int dir, int i, int j)
 
 // Funtion to process a move in a direction
 void process_successor(int i, int j, Pair dest, Pair src, int grid[][COL], int diagonel, int direction)
-{
+{   
     // Only run this function if the destination is NOT found
     if (foundDest == 0)
     {
@@ -98,7 +84,7 @@ void process_successor(int i, int j, Pair dest, Pair src, int grid[][COL], int d
             if (isDestination(i, j, dest) == 1)
             {
                 updateParrentCell(direction, i, j);
-                //printf("The destination cell is found\n");
+                printf("The destination cell is found\n");
                 tracePath(dest, src, grid);
                 foundDest = 1;
             }
@@ -154,7 +140,7 @@ int isValid(int row, int col)
 int isUnBlocked(int grid[][COL], int row, int col)
 {
     // Returns 1 if the cell is not blocked else 0
-    if (grid[row][col] != 0)
+    if (grid[row][col] == 1)
         return (1);
     else
         return (0);
@@ -203,17 +189,16 @@ void tracePath(Pair dest, Pair src, int grid[][COL])
     Pair item = {row, col};
     push(Path, item);
 
-    // Push the source coordinates onto the stack
+    // Push the source coordinates onto the stack 
     Pair item2 = {src.first, src.second};
     push(Path, item2);
 
     // Output the path and update the grid with the path information
-    outputAstar(grid, *Path);
+    output(grid, *Path);
 }
 // The main funtion in the program, runs an Astar search on a grid given a source and a destination
 void aStarSearch(int grid[][COL], Pair src, Pair dest)
 {
-    foundDest = 0;
     // If the source is out of range
     if (isValid(src.first, src.second) == 0)
     {
@@ -345,13 +330,11 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
         printf("Failed to find the Destination Cell\n");
 }
 
+
 // Function to check if a mine is already in the path
-int isVisited(int *path, int mine, int n)
-{
-    for (int i = 0; i < n; i++)
-    {
-        if (path[i] == mine)
-        {
+int isVisited(int* path, int mine, int n) {
+    for (int i = 0; i < n; i++) {
+        if (path[i] == mine) {
             return 1; // mine is already visited
         }
     }
@@ -359,130 +342,105 @@ int isVisited(int *path, int mine, int n)
 }
 
 // Function to calculate the Euclidean distance between two points
-double calculateDistance(pPair point1, pPair point2)
-{
+double calculateDistance(pPair point1, pPair point2) {
     return sqrt(pow(point1.second.first - point2.second.first, 2) + pow(point1.second.second - point2.second.second, 2));
 }
 
-int distance(Mine a, Mine b)
-{
-    // Calculate Euclidean distance between two mines
-    return (int)round(sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2)));
+// Function to find the next city to visit in the TSP
+int findNextCity(Set* remainingCities, pPair currentCity) {
+    double minDistance = 1.7976931348623157E+308;
+    int nextCityIndex = -1;
+
+    for (int i = 0; i < remainingCities->size; ++i) {
+        double distance = calculateDistance(currentCity, remainingCities->elements[i]);
+        if (distance < minDistance) {
+            minDistance = distance;
+            nextCityIndex = i;
+        }
+    }
+
+    return nextCityIndex;
 }
 
-int pointToMineDistance(Point p, Mine m)
-{
-    // Calculate distance between a point and a mine
-    return (int)round(sqrt(pow(p.x - m.x, 2) + pow(p.y - m.y, 2)));
+// Function to solve the TSP using recursive backtracking
+// Implementation of solveTSP function
+void solveTSP(Set* cities) {
+    if (cities->size <= 1) {
+        printf("Not enough cities to solve TSP.\n");
+        return;
+    }
+
+    Set remainingCities;
+    initializeSet(&remainingCities);
+    for (int i = 1; i < cities->size; ++i) {
+        addToSet(&remainingCities, cities->elements[i]);
+    }
+
+    struct Stack* stack = createStack(MAX_SIZE);
+    push(stack, cities->elements[0].second);
+
+    double totalDistance = 0;
+
+    while (!isSetEmpty(&remainingCities)) {
+        pPair currentCity = {0.0, peek(stack)};
+        int nextCityIndex = findNextCity(&remainingCities, currentCity);
+
+        if (nextCityIndex == -1) {
+            // No more cities to visit, go back to the starting city
+            totalDistance += calculateDistance(currentCity, cities->elements[0]);
+            cities->elements[0].first = calculateDistance(currentCity, cities->elements[0]);
+            break;
+        }
+
+        pPair nextCity = remainingCities.elements[nextCityIndex];
+        totalDistance += calculateDistance(currentCity, nextCity);
+            currentCity.first = calculateDistance(currentCity, nextCity);
+        
+        push(stack, nextCity.second);
+        removeFromSet(&remainingCities, nextCity);
+    }
+
+    printf("Total distance of TSP tour: %.2f\n", totalDistance);
 }
 
-void extractMines(int grid[ROW][COL])
-{
-    // Extract mine coordinates from the matrix and count the number of mines
-    n = 0;
+
+// Modify your aStarSearch function to solve the TSP using A*
+void tspAStar(int grid[][COL], Pair src) {
+    // Assuming that cities[] array is populated with the coordinates of cities
+    Set path;
+    initializeSet(&path);
+    // Set the number of cities
+    numMines = 0;
     for (int i = 0; i < ROW; i++)
     {
         for (int j = 0; j < COL; j++)
         {
-            if (grid[i][j] == 0)
+            if(grid[i][j] == 0)
             {
-                mines[n].x = j;
-                mines[n].y = i;
-                n++;
+                Pair p = {i, j};
+                mines[numMines] = p;
+                pPair pp = {0.0, p};
+                addToSet(&path, pp);
+                numMines++;
             }
         }
     }
+    printf("%d", numMines);
+    
+     // Adjust this based on the actual number of cities
+
+    // Initialize the path array
+
+    // Start the TSP from the source mine
+    
+
+    // Solve the TSP using recursive backtracking
+    solveTSP(&path);
+
+    // Output the best path and cost
+    printf("Best TSP Path: ");
+    for (int i = 0; i < numMines; i++) {
+        printf("%lf : %d,%d\n", path.elements[i].first, path.elements[i].second.first, path.elements[i].second.second);
+    }
 }
 
-int nearestNeighbor(int start)
-{
-    int currentMine = start;
-    visited[currentMine] = 1;
-    path[0] = currentMine;
-
-    for (int i = 1; i < n; i++)
-    {
-        int minDistance = INT_MAX;
-        int nextMine = -1;
-
-        for (int j = 0; j < n; j++)
-        {
-            if (!visited[j] && j != currentMine)
-            {
-                int dist = distance(mines[currentMine], mines[j]);
-                if (dist < minDistance)
-                {
-                    minDistance = dist;
-                    nextMine = j;
-                }
-            }
-        }
-
-        path[i] = nextMine;
-        visited[nextMine] = 1;
-        currentMine = nextMine;
-    }
-
-    return distance(mines[path[n - 1]], mines[start]); // Return distance from last to start
-}
-
-// Modify your aStarSearch function to solve the nearest neighbor
-void tspAStar(int grid[][COL], Pair src)
-{
-    startingPoint.x = src.second;
-    startingPoint.y = src.first;
-    extractMines(grid);
-
-    // Find the nearest mine to the starting point
-    int nearestMine = 0;
-    int minPointMineDistance = pointToMineDistance(startingPoint, mines[0]);
-    for (int i = 1; i < n; i++)
-    {
-        int dist = pointToMineDistance(startingPoint, mines[i]);
-        if (dist < minPointMineDistance)
-        {
-            minPointMineDistance = dist;
-            nearestMine = i;
-        }
-    }
-
-    // Calculate the nearest neighbor
-    int totalDistance = nearestNeighbor(nearestMine);
-    Pair end = {mines[path[0]].y, mines[path[0]].x};
-    for (int i = 0; i < n; i++)
-    {
-        printf("%d %d\n", mines[path[i]].y, mines[path[i]].x);
-        grid[mines[path[i]].y][mines[path[i]].x] = 1;
-        if (i == 0)
-        {
-            aStarSearch(grid, src, end);
-        }
-        else
-        {
-            Pair start = end;
-            end.first = mines[path[i]].y;
-            end.second = mines[path[i]].x;
-            aStarSearch(grid, start, end);
-        }
-    }
-
-    for (int i = 0; i < ROW; i++)
-        {
-            // Loop through each column in the current row
-            for (int l = 0; l < COL; l++)
-            {
-                // Print the value of the grid element to the file
-                printf("%d ", grid[i][l]);
-            }
-            // Print a newline to move to the next row in the grid
-            printf("\n");
-            
-        }
-
-    printf("Nearest Neighbor Tour:\n");
-    for (int i = 0; i < n; i++)
-    {
-        printf("Mine %d: (%d, %d)\n", path[i], mines[path[i]].x, mines[path[i]].y);
-    }
-    printf("Total distance: %d\n", totalDistance);
-}

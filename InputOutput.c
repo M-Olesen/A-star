@@ -42,7 +42,7 @@ void input(int grid[][COL]) {
 
 
 // Function to write output to a file, including the path and the updated grid
-void output(int grid[][COL], struct Stack Path) {
+void outputAstar(int grid[][COL], struct Stack Path) {
     FILE *out_file = fopen("Minefield_output.txt", "a");
 
     // Print a header for the path information in the file
@@ -54,7 +54,7 @@ void output(int grid[][COL], struct Stack Path) {
         pop(&Path);
 
         // Increment the corresponding value in the grid to show the path
-        grid[p.first][p.second] += 1;
+        grid[p.first][p.second] = 2;
 
         // Print the coordinates of the current element in the path to the file
         fprintf(out_file, "-> (%d,%d) ", p.first, p.second);
@@ -82,4 +82,8 @@ void clear_output_file(){
     FILE *out_file = fopen("Minefield_output.txt", "w");
     fprintf(out_file, "");
     fclose(out_file);
+}
+
+void outputDemine() {
+
 }
