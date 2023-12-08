@@ -82,7 +82,7 @@ void updateParrentCell(int dir, int i, int j)
 }
 
 // Funtion to process a move in a direction
-void process_successor(int i, int j, Pair dest, Pair src, int grid[][COL], int diagonel, int direction)
+void process_successor(int i, int j, Pair dest, Pair src, int grid[][COL], int diagonel, int direction, struct Stack *outputPath)
 {
     // Only run this function if the destination is NOT found
     if (foundDest == 0)
@@ -99,7 +99,7 @@ void process_successor(int i, int j, Pair dest, Pair src, int grid[][COL], int d
             {
                 updateParrentCell(direction, i, j);
                 //printf("The destination cell is found\n");
-                tracePath(dest, src, grid);
+                tracePath(dest, src, grid, outputPath);
                 foundDest = 1;
             }
             // If the successor is already on the closed
@@ -176,21 +176,20 @@ double calculateHValue(int row, int col, Pair dest)
 }
 
 // Function to trace the path from destination to source in a grid and output the path
-void tracePath(Pair dest, Pair src, int grid[][COL])
+void tracePath(Pair dest, Pair src, int grid[][COL], struct Stack *outputPath)
 {
     // Extract the destination row and column
     int row = dest.first;
     int col = dest.second;
 
     // Create a stack to store the path
-    struct Stack *Path = createStack(100);
 
     // Trace the path from destination to source until reaching the source
     while (!(cellDetails[row][col].parent_i == src.first && cellDetails[row][col].parent_j == src.second))
     {
         // Create a Pair with the current row and column and push it onto the stack
         Pair item = {row, col};
-        push(Path, item);
+        push(outputPath, item);
 
         // Update the row and column to the parent coordinates
         int temp_row = cellDetails[row][col].parent_i;
@@ -201,17 +200,14 @@ void tracePath(Pair dest, Pair src, int grid[][COL])
 
     // Push the coordinates to the cell before the source onto the stack
     Pair item = {row, col};
-    push(Path, item);
+    push(outputPath, item);
 
     // Push the source coordinates onto the stack
     Pair item2 = {src.first, src.second};
-    push(Path, item2);
-
-    // Output the path and update the grid with the path information
-    outputAstar(grid, *Path);
+    push(outputPath, item2);
 }
 // The main funtion in the program, runs an Astar search on a grid given a source and a destination
-void aStarSearch(int grid[][COL], Pair src, Pair dest)
+void aStarSearch(int grid[][COL], Pair src, Pair dest, struct Stack* outputPath)
 {
     foundDest = 0;
     // If the source is out of range
@@ -326,14 +322,14 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
          S.W--> South-West  (i+1, j-1)*/
 
         //----------- 1st Successor (North) ------------
-        process_successor(i - 1, j, dest, src, grid, 0, 1);
-        process_successor(i + 1, j, dest, src, grid, 0, 2);
-        process_successor(i, j + 1, dest, src, grid, 0, 3);
-        process_successor(i, j - 1, dest, src, grid, 0, 4);
-        process_successor(i - 1, j + 1, dest, src, grid, 1, 5);
-        process_successor(i - 1, j - 1, dest, src, grid, 1, 6);
-        process_successor(i + 1, j + 1, dest, src, grid, 1, 7);
-        process_successor(i + 1, j - 1, dest, src, grid, 1, 8);
+        process_successor(i - 1, j, dest, src, grid, 0, 1, outputPath);
+        process_successor(i + 1, j, dest, src, grid, 0, 2, outputPath);
+        process_successor(i, j + 1, dest, src, grid, 0, 3, outputPath);
+        process_successor(i, j - 1, dest, src, grid, 0, 4, outputPath);
+        process_successor(i - 1, j + 1, dest, src, grid, 1, 5, outputPath);
+        process_successor(i - 1, j - 1, dest, src, grid, 1, 6, outputPath);
+        process_successor(i + 1, j + 1, dest, src, grid, 1, 7, outputPath);
+        process_successor(i + 1, j - 1, dest, src, grid, 1, 8, outputPath);
 
         // When the destination cell is not found and the open
         // list is empty, then we conclude that we failed to
@@ -344,6 +340,8 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
     if (foundDest == 0)
         printf("Failed to find the Destination Cell\n");
 }
+
+//------------------------------------------Nearest Neighbor Algorithm------------------------------------------------------------------------------------
 
 // Function to check if a mine is already in the path
 int isVisited(int *path, int mine, int n)
@@ -356,12 +354,6 @@ int isVisited(int *path, int mine, int n)
         }
     }
     return 0; // mine is not visited
-}
-
-// Function to calculate the Euclidean distance between two points
-double calculateDistance(pPair point1, pPair point2)
-{
-    return sqrt(pow(point1.second.first - point2.second.first, 2) + pow(point1.second.second - point2.second.second, 2));
 }
 
 int distance(Mine a, Mine b)
@@ -426,8 +418,8 @@ int nearestNeighbor(int start)
     return distance(mines[path[n - 1]], mines[start]); // Return distance from last to start
 }
 
-// Modify your aStarSearch function to solve the nearest neighbor
-void tspAStar(int grid[][COL], Pair src)
+// Calculates the nearest neighbor algorithm which is fed into the Astar algoritm to get the full path
+void NNAStar(int grid[][COL], Pair src, struct Stack* outputPath)
 {
     startingPoint.x = src.second;
     startingPoint.y = src.first;
@@ -451,38 +443,24 @@ void tspAStar(int grid[][COL], Pair src)
     Pair end = {mines[path[0]].y, mines[path[0]].x};
     for (int i = 0; i < n; i++)
     {
-        printf("%d %d\n", mines[path[i]].y, mines[path[i]].x);
+        //printf("%d %d\n", mines[path[i]].y, mines[path[i]].x);
         grid[mines[path[i]].y][mines[path[i]].x] = 1;
         if (i == 0)
         {
-            aStarSearch(grid, src, end);
+            aStarSearch(grid, src, end, outputPath);
         }
         else
         {
             Pair start = end;
             end.first = mines[path[i]].y;
             end.second = mines[path[i]].x;
-            aStarSearch(grid, start, end);
+            aStarSearch(grid, start, end, outputPath);
         }
     }
-
-    for (int i = 0; i < ROW; i++)
-        {
-            // Loop through each column in the current row
-            for (int l = 0; l < COL; l++)
-            {
-                // Print the value of the grid element to the file
-                printf("%d ", grid[i][l]);
-            }
-            // Print a newline to move to the next row in the grid
-            printf("\n");
-            
-        }
 
     printf("Nearest Neighbor Tour:\n");
     for (int i = 0; i < n; i++)
     {
         printf("Mine %d: (%d, %d)\n", path[i], mines[path[i]].x, mines[path[i]].y);
     }
-    printf("Total distance: %d\n", totalDistance);
 }

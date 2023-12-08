@@ -43,6 +43,13 @@ Pair peek(struct Stack* stack)
     return stack->array[stack->top];
 }
 
+// Funtion to empth a whole stack
+void emptyStack(struct Stack* stack) {
+    while(!isEmpty(stack)) {
+        pop(stack);
+    }
+}
+
 
 
 // Function to initialize an empty set

@@ -35,13 +35,17 @@ int main()
  
     // Destination is the left-most top-most corner
     Pair dest = {0, 9};
+
+    struct Stack *Path = createStack(100);
     
 
-    aStarSearch(grid, src, dest);
+    aStarSearch(grid, src, dest, Path);
+    outputAstar(grid, *Path);
 
 
     input(grid);
-
-    tspAStar(grid, src);
+    struct Stack *PathNN = createStack(100);
+    NNAStar(grid, src, PathNN);
+    outputAstar(grid, *PathNN);
     return (0);
 }

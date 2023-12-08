@@ -26,6 +26,7 @@ int isEmpty(struct Stack* stack);
 void push(struct Stack* stack, Pair item);
 Pair pop(struct Stack* stack);
 Pair peek(struct Stack* stack);
+void emptyStack(struct Stack* stack);
 
 // A structure to represent a stack
 typedef struct Stack {
