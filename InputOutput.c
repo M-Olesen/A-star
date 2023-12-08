@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "search.h"
-#define ROW 9
-#define COL 10
 
 // Function to read input from a file and populate a 2D array (grid)
 void input(int grid[][COL]) {
@@ -40,9 +38,8 @@ void input(int grid[][COL]) {
     fclose(in_file);
 }
 
-
 // Function to write output to a file, including the path and the updated grid
-void outputAstar(int grid[][COL], struct Stack Path) {
+void output(int grid[][COL], struct Stack Path) {
     FILE *out_file = fopen("Minefield_output.txt", "a");
 
     // Print a header for the path information in the file
@@ -77,13 +74,8 @@ void outputAstar(int grid[][COL], struct Stack Path) {
     fclose(out_file);
 }
 
-
 void clear_output_file(){
     FILE *out_file = fopen("Minefield_output.txt", "w");
     fprintf(out_file, "");
     fclose(out_file);
-}
-
-void outputDemine() {
-
 }

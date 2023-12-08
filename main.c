@@ -12,40 +12,38 @@
      1--> The cell is not blocked
      0--> The cell is blocked    */
     /*int grid[ROW][COL] = { { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
-            { 1, 1, 1, 0, 1, 1, 1, 0, 1, 1 },
-            { 1, 1, 1, 0, 1, 1, 0, 1, 0, 1 },
-            { 0, 0, 1, 0, 1, 0, 0, 0, 0, 1 },
-            { 1, 1, 1, 0, 1, 1, 1, 0, 1, 0 },
-            { 1, 0, 1, 1, 1, 1, 0, 1, 0, 0 },
-            { 1, 0, 0, 0, 0, 1, 0, 0, 0, 1 },
-            { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
-            { 1, 1, 1, 0, 0, 0, 1, 0, 0, 1 } };
-            */
+                             { 1, 1, 1, 0, 1, 1, 1, 0, 1, 1 },
+                             { 1, 1, 1, 0, 1, 1, 0, 1, 0, 1 },
+                             { 0, 0, 1, 0, 1, 0, 0, 0, 0, 1 },
+                             { 1, 1, 1, 0, 1, 1, 1, 0, 1, 0 },
+                             { 1, 0, 1, 1, 1, 1, 0, 1, 0, 0 },
+                             { 1, 0, 0, 0, 0, 1, 0, 0, 0, 1 },
+                             { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
+                             { 1, 1, 1, 0, 0, 0, 1, 0, 0, 1 } };
+                            */
 
 int main()
 {
+    // Source is the left-most bottom-most corner
+    Pair src = {8, 0};
+    // Destination is the left-most top-most corner
+    Pair dest = {0, 9};
+
     clear_output_file();
 
     int grid[ROW][COL];
 
     input(grid);
- 
-    // Source is the left-most bottom-most corner
-    Pair src = {8, 0};
- 
-    // Destination is the left-most top-most corner
-    Pair dest = {0, 9};
-
+    // Normal Astar algorithm
     struct Stack *Path = createStack(100);
-    
-
     aStarSearch(grid, src, dest, Path);
-    outputAstar(grid, *Path);
+    output(grid, *Path);
 
 
     input(grid);
+    // Demining, find a path so every mine is visted
     struct Stack *PathNN = createStack(100);
     NNAStar(grid, src, PathNN);
-    outputAstar(grid, *PathNN);
+    output(grid, *PathNN);
     return (0);
 }

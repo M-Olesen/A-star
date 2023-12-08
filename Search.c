@@ -30,12 +30,12 @@ typedef struct
 } Point;
 
 int n; // Number of mines
-
 Point startingPoint; // Starting point on the grid
 Mine mines[MAX];     // Array to store the coordinates of mines
 int visited[MAX];    // Array to keep track of visited mines
 int path[MAX];       // Array to store the TSP tour
 
+// ------------------------------------------------------------ ASTAR ----------------------------------------------------------------------------------------
 // Function to set the current cells parrent based on a direction
 void updateParrentCell(int dir, int i, int j)
 {

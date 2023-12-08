@@ -1,5 +1,6 @@
 #include "stack.h"
 
+// ------------------------------------------------------------ STACK ----------------------------------------------------------------------------------------
 // function to create a stack of given capacity. It initializes size of
 // stack as 0
 struct Stack* createStack(unsigned capacity)
@@ -50,8 +51,7 @@ void emptyStack(struct Stack* stack) {
     }
 }
 
-
-
+// ------------------------------------------------------------ SET ----------------------------------------------------------------------------------------
 // Function to initialize an empty set
 void initializeSet(Set* set) {
     set->size = 0;
