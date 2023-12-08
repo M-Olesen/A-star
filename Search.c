@@ -458,9 +458,11 @@ void NNAStar(int grid[][COL], Pair src, struct Stack* outputPath)
         }
     }
 
+    /*
     printf("Nearest Neighbor Tour:\n");
     for (int i = 0; i < n; i++)
     {
         printf("Mine %d: (%d, %d)\n", path[i], mines[path[i]].x, mines[path[i]].y);
     }
+    */
 }

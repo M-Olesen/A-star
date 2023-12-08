@@ -44,6 +44,7 @@ void output(int grid[][COL], struct Stack Path) {
 
     // Print a header for the path information in the file
     fprintf(out_file, "\nThe Path is: ");
+    printf("\nThe Path is: ");
 
     // Process each element in the stack until it's empty
     while (isEmpty(&Path) != 1) {
@@ -54,11 +55,13 @@ void output(int grid[][COL], struct Stack Path) {
         grid[p.first][p.second] = 2;
 
         // Print the coordinates of the current element in the path to the file
-        fprintf(out_file, "-> (%d,%d) ", p.first, p.second);
+        fprintf(out_file, "-> (%d,%d) ", p.second, p.first);
+        printf("-> (%d,%d) ", p.second, p.first);
     }
 
     // Print a newline to separate the path information from the grid
     fprintf(out_file, "\n");
+    printf("\n");
 
     // Loop through each row in the grid
     for (int i = 0; i < ROW; i++) {
@@ -66,9 +69,11 @@ void output(int grid[][COL], struct Stack Path) {
         for (int l = 0; l < COL; l++) {
             // Print the value of the grid element to the file
             fprintf(out_file, "%d ", grid[i][l]);
+            printf("%d ", grid[i][l]);
         }
         // Print a newline to move to the next row in the grid
         fprintf(out_file, "\n");
+        printf("\n");
     }
 
     fclose(out_file);
