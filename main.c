@@ -37,6 +37,7 @@ int main()
     // Normal Astar algorithm
     struct Stack *Path = createStack(100);
     aStarSearch(grid, src, dest, Path);
+    push(Path, src);
     output(grid, *Path);
 
 
@@ -44,6 +45,7 @@ int main()
     // Demining, find a path so every mine is visted
     struct Stack *PathNN = createStack(100);
     NNAStar(grid, src, PathNN);
+    push(PathNN, src);
     output(grid, *PathNN);
     return (0);
 }

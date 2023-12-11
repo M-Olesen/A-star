@@ -72,15 +72,15 @@
 	"dependencies" : 
 	[
 		{
-			"backtrace" : 2,
-			"id" : "search::@6890427a1f51a3e7e1df"
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
 		},
 		{
 			"backtrace" : 3,
 			"id" : "stack::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+			"backtrace" : 2,
+			"id" : "search::@6890427a1f51a3e7e1df"
 		}
 	],
 	"id" : "AStar::@6890427a1f51a3e7e1df",

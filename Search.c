@@ -29,7 +29,7 @@ typedef struct
     int x, y;
 } Point;
 
-int n; // Number of mines
+int n;               // Number of mines
 Point startingPoint; // Starting point on the grid
 Mine mines[MAX];     // Array to store the coordinates of mines
 int visited[MAX];    // Array to keep track of visited mines
@@ -98,7 +98,7 @@ void process_successor(int i, int j, Pair dest, Pair src, int grid[][COL], int d
             if (isDestination(i, j, dest) == 1)
             {
                 updateParrentCell(direction, i, j);
-                //printf("The destination cell is found\n");
+                // printf("The destination cell is found\n");
                 tracePath(dest, src, grid, outputPath);
                 foundDest = 1;
             }
@@ -182,7 +182,16 @@ void tracePath(Pair dest, Pair src, int grid[][COL], struct Stack *outputPath)
     int row = dest.first;
     int col = dest.second;
 
-    // Create a stack to store the path
+    // Create a temporay stack to store the path
+    struct Stack *tempPath = createStack(100);
+    struct Stack *tempStack = createStack(100);
+
+    while (isEmpty(outputPath) != 1)
+    {
+        Pair p = peek(outputPath);
+        pop(outputPath);
+        push(tempStack, p);
+    }
 
     // Trace the path from destination to source until reaching the source
     while (!(cellDetails[row][col].parent_i == src.first && cellDetails[row][col].parent_j == src.second))
@@ -190,6 +199,7 @@ void tracePath(Pair dest, Pair src, int grid[][COL], struct Stack *outputPath)
         // Create a Pair with the current row and column and push it onto the stack
         Pair item = {row, col};
         push(outputPath, item);
+        push(tempPath, item);
 
         // Update the row and column to the parent coordinates
         int temp_row = cellDetails[row][col].parent_i;
@@ -201,13 +211,27 @@ void tracePath(Pair dest, Pair src, int grid[][COL], struct Stack *outputPath)
     // Push the coordinates to the cell before the source onto the stack
     Pair item = {row, col};
     push(outputPath, item);
+    push(tempPath, item);
 
-    // Push the source coordinates onto the stack
-    Pair item2 = {src.first, src.second};
-    push(outputPath, item2);
+    printf("-> (%d,%d) ", src.second, src.first);
+    while (isEmpty(tempPath) != 1)
+    {
+        Pair p = peek(tempPath);
+        pop(tempPath);
+
+        // Print the coordinates of the current element in the path to the file
+        printf("-> (%d,%d) ", p.second, p.first);
+    }
+
+    while (isEmpty(tempStack) != 1)
+    {
+        Pair p = peek(tempStack);
+        pop(tempStack);
+        push(outputPath, p);
+    }
 }
 // The main funtion in the program, runs an Astar search on a grid given a source and a destination
-void aStarSearch(int grid[][COL], Pair src, Pair dest, struct Stack* outputPath)
+void aStarSearch(int grid[][COL], Pair src, Pair dest, struct Stack *outputPath)
 {
     foundDest = 0;
     // If the source is out of range
@@ -419,7 +443,7 @@ int nearestNeighbor(int start)
 }
 
 // Calculates the nearest neighbor algorithm which is fed into the Astar algoritm to get the full path
-void NNAStar(int grid[][COL], Pair src, struct Stack* outputPath)
+void NNAStar(int grid[][COL], Pair src, struct Stack *outputPath)
 {
     startingPoint.x = src.second;
     startingPoint.y = src.first;
@@ -441,13 +465,15 @@ void NNAStar(int grid[][COL], Pair src, struct Stack* outputPath)
     // Calculate the nearest neighbor
     int totalDistance = nearestNeighbor(nearestMine);
     Pair end = {mines[path[0]].y, mines[path[0]].x};
+    printf("Path to nearest mines");
     for (int i = 0; i < n; i++)
     {
-        //printf("%d %d\n", mines[path[i]].y, mines[path[i]].x);
+        // printf("%d %d\n", mines[path[i]].y, mines[path[i]].x);
         grid[mines[path[i]].y][mines[path[i]].x] = 1;
         if (i == 0)
         {
             aStarSearch(grid, src, end, outputPath);
+            
         }
         else
         {
