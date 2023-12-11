@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-
+#include "Windows.h"
 #define ROW 9
 #define COL 10
 #define MAX ROW *COL
@@ -175,6 +175,7 @@ double calculateHValue(int row, int col, Pair dest)
         (row - dest.first) * (row - dest.first) + (col - dest.second) * (col - dest.second)));
 }
 
+int firstRun = 0;
 // Function to trace the path from destination to source in a grid and output the path
 void tracePath(Pair dest, Pair src, int grid[][COL], struct Stack *outputPath)
 {
@@ -213,7 +214,11 @@ void tracePath(Pair dest, Pair src, int grid[][COL], struct Stack *outputPath)
     push(outputPath, item);
     push(tempPath, item);
 
-    printf("-> (%d,%d) ", src.second, src.first);
+    if (!firstRun) {
+        printf("-> (%d,%d) ", src.second, src.first);
+        firstRun++;
+    }
+    
     while (isEmpty(tempPath) != 1)
     {
         Pair p = peek(tempPath);
@@ -468,6 +473,7 @@ void NNAStar(int grid[][COL], Pair src, struct Stack *outputPath)
     printf("Path to nearest mines");
     for (int i = 0; i < n; i++)
     {
+        getch();
         // printf("%d %d\n", mines[path[i]].y, mines[path[i]].x);
         grid[mines[path[i]].y][mines[path[i]].x] = 1;
         if (i == 0)
