@@ -1,12 +1,13 @@
+
 #include <stdio.h>
 #include "Search.h"
 #include <math.h>
 #include <string.h>
+#include <conio.h>
 #include "InputOutput.h"
+#include "DroneSimulation.h"
 
 
-#define ROW 9
-#define COL 10
 
 /* Description of the Grid-
      1--> The cell is not blocked
@@ -22,6 +23,8 @@
                              { 1, 1, 1, 0, 0, 0, 1, 0, 0, 1 } };
                             */
 
+
+
 int main()
 {
     // Source is the left-most bottom-most corner
@@ -34,6 +37,9 @@ int main()
     int grid[ROW][COL];
 
     input(grid);
+
+    //Drone simulation
+    drone_simulation(grid);
     // Normal Astar algorithm
     struct Stack *Path = createStack(100);
     aStarSearch(grid, src, dest, Path);
@@ -47,5 +53,6 @@ int main()
     NNAStar(grid, src, PathNN);
     push(PathNN, src);
     output(grid, *PathNN);
+    getch();
     return (0);
 }

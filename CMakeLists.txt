@@ -8,6 +8,9 @@ add_executable(AStar main.c
         stack.h
         InputOutput.c
         InputOutput.h
+        DroneSimulation.c
+        DroneSimulation.h
+        Console.h
 )
 
 add_library(search search.c)

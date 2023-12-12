@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <conio.h>
 #include "Windows.h"
 #define ROW 9
 #define COL 10

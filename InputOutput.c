@@ -1,7 +1,9 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "search.h"
+#include "Search.h"
+#include "Console.h"
 
 // Function to read input from a file and populate a 2D array (grid)
 void input(int grid[][COL]) {
@@ -69,13 +71,22 @@ void output(int grid[][COL], struct Stack Path) {
         for (int l = 0; l < COL; l++) {
             // Print the value of the grid element to the file
             fprintf(out_file, "%d ", grid[i][l]);
+            if(grid[i][l] == 1){
+                set_text_color(GREEN);
+            }
+            else if(grid[i][l] == 2){
+                set_text_color(LIGHT_YELLOW);
+            }
+            else if(grid[i][l] == 0){
+                set_text_color(RED);
+            }
             printf("%d ", grid[i][l]);
         }
         // Print a newline to move to the next row in the grid
         fprintf(out_file, "\n");
         printf("\n");
     }
-
+    set_text_color(DEFAULT);
     fclose(out_file);
 }
 
